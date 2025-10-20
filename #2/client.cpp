@@ -16,7 +16,7 @@ int main(){
     struct sockaddr_storage server_addr;
     socklen_t addrlen;
     hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_socktype = SOCK_DGRAM;
     int status = getaddrinfo("127.0.0.1", PORT, &hints, &res);
     if(status != 0){
         std::cerr << "getaddrinfo error: " << gai_strerror(status) << std::endl;
@@ -30,7 +30,7 @@ int main(){
     }
     std::cin >> msg;
     len = strlen(msg);
-    bytes_sent = send(client_fd, msg, len, 0);
+    bytes_sent = sendto(client_fd, msg, len, 0, res->ai_addr, res->ai_addrlen);
     if(bytes_sent == -1){
         std::cerr << "Send error" << std::endl;
         close(client_fd);

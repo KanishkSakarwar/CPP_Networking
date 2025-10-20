@@ -46,22 +46,16 @@ int main(){
         return 1;
     }
     char buffer[1024];
-    while(true){
-        int bytes_received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
-        if(bytes_received == -1){
-            std::cerr << "Receive error" << std::endl;
-            close(client_fd);
-            close(server_fd);
-            freeaddrinfo(res);
-            return 1;
-        }
-        buffer[bytes_received] = '\0';
-        if(bytes_received == 0){
-            std::cout<<"Connection closed \n";
-            break; // Connection closed
-        }
-        std::cout << "Message from client: " << buffer << std::endl;
+    int bytes_received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
+    if(bytes_received == -1){
+        std::cerr << "Receive error" << std::endl;
+        close(client_fd);
+        close(server_fd);
+        freeaddrinfo(res);
+        return 1;
     }
+    buffer[bytes_received] = '\0';
+    std::cout << "Message from client: " << buffer << std::endl;
     close(client_fd);
     close(server_fd);
     freeaddrinfo(res);
